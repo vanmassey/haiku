@@ -1,0 +1,34 @@
+name: Haiku AI documentation checks
+
+on:
+  push:
+    paths:
+      - "haiku-ai/**"
+      - ".github/workflows/haiku-ai-docs.yml"
+  pull_request:
+    paths:
+      - "haiku-ai/**"
+      - ".github/workflows/haiku-ai-docs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  documentation:
+    name: Check project documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Check Markdown hygiene
+        run: python3 haiku-ai/tools/check_docs.py
+
+      - name: Check shell script syntax
+        run: bash -n haiku-ai/scripts/build-x86_64.sh haiku-ai/tools/check_build_host.sh
