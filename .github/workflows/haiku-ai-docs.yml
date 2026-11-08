@@ -31,4 +31,4 @@ jobs:
         run: python3 haiku-ai/tools/check_docs.py
 
       - name: Check shell script syntax
-        run: bash -n haiku-ai/scripts/build-x86_64.sh haiku-ai/tools/check_build_host.sh
+        run: bash -n haiku-ai/scripts/build-x86_64.sh haiku-ai/scripts/boot-qemu-x86_64.sh haiku-ai/tools/check_build_host.sh
