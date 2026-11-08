@@ -6,7 +6,7 @@ ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
 BUILDTOOLS_DIR="${BUILDTOOLS_DIR:-$(cd "$ROOT/.." && pwd)/buildtools}"
 BUILD_DIR="${BUILD_DIR:-$ROOT/generated.x86_64}"
 JOBS="${JOBS:-2}"
-HOST_BIN="$ROOT/haiku-ai/.host-bin"
+HOST_BIN="$BUILD_DIR/host-bin"
 
 fail() {
     printf 'ERROR: %s\n' "$*" >&2
@@ -39,7 +39,7 @@ cd "$BUILD_DIR"
 # Build the official anyboot image target. This can take a long time and needs
 # substantial free disk space. Preserve the full output in build.log.
 set +e
-jam -q "-j$JOBS" @nightly-anyboot 2>&1 | tee "$ROOT/haiku-ai/build.log"
+jam -q "-j$JOBS" @nightly-anyboot 2>&1 | tee "$BUILD_DIR/build.log"
 status=${PIPESTATUS[0]}
 set -e
 exit "$status"
