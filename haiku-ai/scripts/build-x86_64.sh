@@ -39,8 +39,29 @@ cd "$BUILD_DIR"
 
 # Build the official anyboot image target. This can take a long time and needs
 # substantial free disk space. Preserve the full output in build.log.
+SOURCE_COMMIT="$(git -C "$ROOT" rev-parse HEAD)"
+BUILDTOOLS_COMMIT="$(git -C "$BUILDTOOLS_DIR" rev-parse HEAD)"
+{
+    printf 'Haiku source commit: %s\\n' "$SOURCE_COMMIT"
+    printf 'Buildtools commit:   %s\\n' "$BUILDTOOLS_COMMIT"
+    printf 'Host:                %s\\n' "$(uname -a)"
+    printf 'Started:             %s\\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    printf 'Command:             jam -q -j%s @nightly-anyboot\\n' "$JOBS"
+} > "$BUILD_DIR/build-metadata.txt"
+
 set +e
 jam -q "-j$JOBS" @nightly-anyboot 2>&1 | tee "$BUILD_DIR/build.log"
 status=${PIPESTATUS[0]}
 set -e
+
+{
+    printf 'Exit status:         %s\\n' "$status"
+    printf 'Finished:            %s\\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    if [[ -f "$BUILD_DIR/haiku-nightly-anyboot.iso" ]]; then
+        printf 'Image SHA-256:       %s\\n' "$(sha256sum "$BUILD_DIR/haiku-nightly-anyboot.iso" | awk '{print $1}')"
+    else
+        printf 'Image SHA-256:       not available (image was not produced)\\n'
+    fi
+} >> "$BUILD_DIR/build-metadata.txt"
+
 exit "$status"
