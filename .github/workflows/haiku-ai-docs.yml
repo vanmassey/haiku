@@ -29,3 +29,6 @@ jobs:
 
       - name: Check Markdown hygiene
         run: python3 haiku-ai/tools/check_docs.py
+
+      - name: Check build script syntax
+        run: bash -n haiku-ai/scripts/build-x86_64.sh
