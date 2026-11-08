@@ -4,8 +4,8 @@ set -Eeuo pipefail
 
 missing=()
 required=(
-    awk bison flex lex gcc g++ make nasm wget unzip xorriso
-    mformat mcopy mmd python3 git
+    awk bison flex lex gcc g++ make autoheader automake nasm wget unzip xorriso
+    as ld ar ranlib objcopy strip mformat mcopy mmd python3 git
 )
 
 for tool in "${required[@]}"; do
