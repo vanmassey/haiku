@@ -18,6 +18,7 @@ command -v make >/dev/null 2>&1 || fail "make is required"
 command -v gcc >/dev/null 2>&1 || fail "gcc is required"
 command -v git >/dev/null 2>&1 || fail "git is required"
 command -v python3 >/dev/null 2>&1 || fail "python3 is required"
+"$ROOT/haiku-ai/tools/check_build_host.sh"
 
 printf 'Haiku source: %s\n' "$ROOT"
 printf 'Buildtools:   %s\n' "$BUILDTOOLS_DIR"
