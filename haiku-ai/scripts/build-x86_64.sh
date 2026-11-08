@@ -58,6 +58,9 @@ BUILDTOOLS_COMMIT="$(git -C "$BUILDTOOLS_DIR" rev-parse HEAD)"
 # Remove a previous image so a failed build cannot be mistaken for a fresh one.
 rm -f "$IMAGE"
 
+# Haiku configure writes BuildConfig and generated files in the current directory.
+cd "$BUILD_DIR"
+
 # Preserve configure output and its exit status as well as the later Jam log.
 set +e
 "$ROOT/configure" --cross-tools-source "$BUILDTOOLS_DIR" --build-cross-tools x86_64 2>&1 | tee "$BUILD_DIR/configure.log"
