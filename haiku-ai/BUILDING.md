@@ -50,7 +50,7 @@ filesystem is case-sensitive. It then builds Haiku's Jam from buildtools,
 configures the x86_64 cross-toolchain, and runs the upstream `@nightly-anyboot`
 target. The generated
 image is placed in the `generated.x86_64` output directory. The full Jam
-output is saved as `haiku-ai/build.log`.
+output is saved as `generated.x86_64/build.log`. The same output directory\nreceives `build-metadata.txt`, recording both source commits, host details,\ntimestamps, exit status, and the image SHA-256 when an image is produced.
 
 The default parallelism is two jobs to avoid overwhelming modest machines.
 Override it explicitly when appropriate:
