@@ -48,9 +48,15 @@ checks the documented command-line prerequisites, verifies that pkg-config can
 find zlib and zstd development files, and tests whether the temporary build
 filesystem is case-sensitive. It then builds Haiku's Jam from buildtools,
 configures the x86_64 cross-toolchain, and runs the upstream `@nightly-anyboot`
-target. The generated
-image is placed in the `generated.x86_64` output directory. The full Jam
-output is saved as `generated.x86_64/build.log`. The same output directory\nreceives `build-metadata.txt`, recording both source commits, host details,\ntimestamps, exit status, and the image SHA-256 when an image is produced.
+target. The expected image is
+`generated.x86_64/haiku-nightly-anyboot.iso`. The full Jam output is saved as
+`generated.x86_64/build.log`. The same output directory receives
+`build-metadata.txt`, recording both source commits, host details, timestamps,
+exit status, image size, and the image SHA-256 after a successful build.
+
+The build script removes an old image before starting and treats a successful
+Jam exit without a new, non-empty image as a failed build. This prevents a
+stale image from being mistaken for a fresh result.
 
 The default parallelism is two jobs to avoid overwhelming modest machines.
 Override it explicitly when appropriate:
