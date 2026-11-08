@@ -43,8 +43,12 @@ Then run:
 bash haiku-ai/scripts/build-x86_64.sh
 ```
 
-The script builds Haiku's Jam from buildtools, configures the x86_64 cross
-toolchain, and runs the upstream `@nightly-anyboot` target. The generated
+Before compiling, the script runs `haiku-ai/tools/check_build_host.sh`. This
+checks the documented command-line prerequisites, verifies that pkg-config can
+find zlib and zstd development files, and tests whether the temporary build
+filesystem is case-sensitive. It then builds Haiku's Jam from buildtools,
+configures the x86_64 cross-toolchain, and runs the upstream `@nightly-anyboot`
+target. The generated
 image is placed in the `generated.x86_64` output directory. The full Jam
 output is saved as `haiku-ai/build.log`.
 
