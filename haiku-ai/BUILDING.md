@@ -89,7 +89,28 @@ BUILDTOOLS_DIR=/absolute/path/to/buildtools bash haiku-ai/scripts/build-x86_64.s
 
 ## Emulator smoke test
 
-After a successful image build, use QEMU with the image path and a suitable
-x86_64 virtual machine configuration. Keep the first emulator test manual
-until we have confirmed the exact image format and boot invocation produced
-by the current build. Then encode that verified invocation in automation.
+After a successful image build, install QEMU for your Linux distribution and
+run:
+
+```sh
+bash haiku-ai/scripts/boot-qemu-x86_64.sh
+```
+
+The helper starts `qemu-system-x86_64` with the anyboot ISO as a virtual
+CD-ROM, two virtual CPUs, and 2 GiB of memory. It does not enable KVM, so it
+uses QEMU's portable emulation path. You can override the defaults:
+
+```sh
+MEMORY=3072 CPUS=4 bash haiku-ai/scripts/boot-qemu-x86_64.sh
+```
+
+Or select another QEMU executable and image:
+
+```sh
+QEMU=qemu-system-x86_64 IMAGE=/path/to/haiku-nightly-anyboot.iso bash haiku-ai/scripts/boot-qemu-x86_64.sh
+```
+
+This launches the emulator; it does not automatically determine whether Haiku
+has reached the desktop. Record whether the boot succeeds, any visible errors,
+and the time from starting QEMU to reaching the desktop. Do not report a
+successful boot until it has been observed.
