@@ -5,7 +5,7 @@ set -Eeuo pipefail
 missing=()
 required=(
     awk bison flex lex gcc g++ make autoheader automake nasm wget unzip xorriso
-    as ld ar ranlib objcopy strip mformat mcopy mmd python3 git
+    as ld ar ranlib objcopy strip mformat mcopy mmd python3 git sha256sum
 )
 
 for tool in "${required[@]}"; do
@@ -30,13 +30,17 @@ if ! pkg-config --exists zlib libzstd; then
     exit 1
 fi
 
-# Haiku requires a case-sensitive filesystem. Verify this in a temporary
-# directory rather than creating probe files in the source checkout.
+# A case-insensitive filesystem resolves the differently-cased name here.
 probe_dir="$(mktemp -d)"
 trap 'rm -rf "$probe_dir"' EXIT
 : > "$probe_dir/HaikuAI-case-probe"
-if ! ( : > "$probe_dir/haikuai-case-probe" ) 2>/dev/null; then
+if [[ -e "$probe_dir/haikuai-case-probe" ]]; then
     printf 'ERROR: the filesystem containing the temporary directory is not case-sensitive.\n' >&2
+    exit 1
+fi
+: > "$probe_dir/haikuai-case-probe"
+if [[ ! -f "$probe_dir/HaikuAI-case-probe" || ! -f "$probe_dir/haikuai-case-probe" ]]; then
+    printf 'ERROR: case-sensitivity probe did not create two distinct files.\n' >&2
     exit 1
 fi
 
