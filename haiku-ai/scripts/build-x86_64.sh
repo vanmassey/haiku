@@ -6,14 +6,17 @@ ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
 BUILDTOOLS_DIR="${BUILDTOOLS_DIR:-$(cd "$ROOT/.." && pwd)/buildtools}"
 BUILD_DIR="${BUILD_DIR:-$ROOT/generated.x86_64}"
 JOBS="${JOBS:-2}"
-HOST_BIN="$BUILD_DIR/host-bin"
-
 fail() {
     printf 'ERROR: %s\n' "$*" >&2
     exit 1
 }
 
 [[ -d "$BUILDTOOLS_DIR/jam" ]] || fail "Buildtools not found at $BUILDTOOLS_DIR. Clone https://review.haiku-os.org/buildtools beside this Haiku checkout, or set BUILDTOOLS_DIR."
+BUILDTOOLS_DIR="$(cd "$BUILDTOOLS_DIR" && pwd)"
+mkdir -p "$BUILD_DIR"
+BUILD_DIR="$(cd "$BUILD_DIR" && pwd)"
+HOST_BIN="$BUILD_DIR/host-bin"
+[[ "$JOBS" =~ ^[1-9][0-9]*$ ]] || fail "JOBS must be a positive integer"
 command -v make >/dev/null 2>&1 || fail "make is required"
 command -v gcc >/dev/null 2>&1 || fail "gcc is required"
 command -v git >/dev/null 2>&1 || fail "git is required"
